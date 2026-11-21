@@ -11,6 +11,7 @@
   import ButtonContextMenu from '$lib/components/shared-components/context-menu/ButtonContextMenu.svelte';
   import MenuOption from '$lib/components/shared-components/context-menu/MenuOption.svelte';
   import ControlAppBar from '$lib/components/shared-components/ControlAppBar.svelte';
+  import UserSidebar from '$lib/components/shared-components/side-bar/UserSidebar.svelte';
   import UserAvatar from '$lib/components/shared-components/UserAvatar.svelte';
   import ArchiveAction from '$lib/components/timeline/actions/ArchiveAction.svelte';
   import ChangeDate from '$lib/components/timeline/actions/ChangeDateAction.svelte';
@@ -340,7 +341,13 @@
 <CommandPaletteDefaultProvider name={$t('album')} actions={[AddAssets, Upload, Close, ...Object.values(Actions)]} />
 
 <div class="flex overflow-hidden" use:scrollMemoryClearer={{ routeStartsWith: Route.albums() }}>
-  <div class="relative w-full shrink">
+  {#if authManager.authenticated}
+    <!-- keep the sidebar (with the album tree) next to the album, like on the other library pages -->
+    <div class="grid h-dvh shrink-0 pt-(--navbar-height) max-md:pt-(--navbar-height-md)">
+      <UserSidebar />
+    </div>
+  {/if}
+  <div class="relative w-full min-w-0 shrink">
     <main class="relative h-dvh overflow-hidden px-2 pt-(--navbar-height) max-md:pt-(--navbar-height-md) md:px-6">
       <Timeline
         enableRouting={viewMode === AlbumPageViewMode.SELECT_ASSETS ? false : true}
