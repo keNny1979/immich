@@ -100,3 +100,7 @@
 1790693088454-AddPersonUserTableSharedBySharedWithConstraint
 1791272165634-AddAlbumHierarchy
 1791359000000-AllowDuplicateAssetUploads
+1792213725597-AddAssetFaceAssetState
+1792511451454-AddPasskeyTable
+1792517020180-AddUpdateIdIndexes
+1792568637987-AddAssetOwnerIdUpdateIdIndex

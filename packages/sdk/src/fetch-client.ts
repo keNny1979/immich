@@ -1,6 +1,6 @@
 /**
  * Immich
- * 3.3.0-rc.0
+ * 3.4.1
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -63,6 +63,8 @@ export type AdminConfigDatabaseBackupDto = {
     keepLastAmount: number;
 };
 export type AdminConfigBackupsDto = {
+    /** Whether the backups feature is enabled */
+    beta?: boolean;
     database: AdminConfigDatabaseBackupDto;
 };
 export type AdminConfigFFmpegRealtimeDto = {
@@ -357,6 +359,14 @@ export type AdminConfigOAuthDto = {
     timeout: number;
     tokenEndpointAuthMethod: OAuthTokenEndpointAuthMethod;
 };
+export type AdminConfigPasskeyDto = {
+    /** Additional domains */
+    additionalDomains: string[];
+    /** Passkey domain */
+    domain: string | null;
+    /** Enabled */
+    enabled: boolean;
+};
 export type AdminConfigPasswordLoginDto = {
     /** Enabled */
     enabled: boolean;
@@ -425,6 +435,7 @@ export type AdminConfigDto = {
     nightlyTasks: AdminConfigNightlyTasksDto;
     notifications: AdminConfigNotificationsDto;
     oauth: AdminConfigOAuthDto;
+    passkey: AdminConfigPasskeyDto;
     passwordLogin: AdminConfigPasswordLoginDto;
     reverseGeocoding: AdminConfigReverseGeocodingDto;
     server: AdminConfigServerDto;
@@ -474,6 +485,10 @@ export type SetMaintenanceModeDto = {
     action: MaintenanceAction;
     /** Restore backup filename */
     restoreBackupFilename?: string;
+    /** Rollback repository ID */
+    rollbackRepositoryId?: string;
+    /** Rollback snapshot ID */
+    rollbackSnapshotId?: string;
 };
 export type MaintenanceDetectInstallStorageFolderDto = {
     /** Number of files in the folder */
@@ -499,6 +514,8 @@ export type MaintenanceStatusResponseDto = {
     action: MaintenanceAction;
     active: boolean;
     error?: string;
+    /** FUTO Backups job ID */
+    futoBackupsJobId?: string;
     progress?: number;
     task?: string;
 };
@@ -1620,11 +1637,24 @@ export type UserConfigMapDto = {
     /** Light map style URL */
     lightStyle: string;
 };
+export type UserConfigSmtpDto = {
+    /** Whether SMTP email notifications are enabled */
+    enabled: boolean;
+};
+export type UserConfigNotificationsDto = {
+    smtp: UserConfigSmtpDto;
+};
 export type UserConfigOAuthDto = {
+    /** Account management URL */
+    accountManagementUrl?: string;
     /** Auto launch */
     autoLaunch: boolean;
     /** Button text */
     buttonText: string;
+    /** Enabled */
+    enabled: boolean;
+};
+export type UserConfigPasskeyDto = {
     /** Enabled */
     enabled: boolean;
 };
@@ -1644,10 +1674,6 @@ export type UserConfigServerDto = {
     /** Public users */
     publicUsers: boolean;
 };
-export type UserConfigThemeDto = {
-    /** Custom CSS for theming */
-    customCss: string;
-};
 export type UserConfigTrashDto = {
     /** Days */
     days: number;
@@ -1663,11 +1689,12 @@ export type UserConfigDto = {
     image: UserConfigImageDto;
     machineLearning: UserConfigMachineLearningDto;
     map: UserConfigMapDto;
+    notifications: UserConfigNotificationsDto;
     oauth: UserConfigOAuthDto;
+    passkey: UserConfigPasskeyDto;
     passwordLogin: UserConfigPasswordLoginDto;
     reverseGeocoding: UserConfigReverseGeocodingDto;
     server: UserConfigServerDto;
-    theme: UserConfigThemeDto;
     trash: UserConfigTrashDto;
     user: UserConfigUserDto;
 };
@@ -2015,6 +2042,47 @@ export type PartnerUpdateDto = {
     /** Show partner assets in timeline */
     inTimeline: boolean;
 };
+export type PasskeyResponseDto = {
+    /** Creation date */
+    createdAt: string;
+    /** Passkey ID */
+    id: string;
+    /** Passkey name */
+    name: string | null;
+    /** Last update date */
+    updatedAt: string;
+    /** Last used date */
+    usedAt: string | null;
+};
+export type PasskeyAuthenticationFinishDto = {
+    /** Response returned by @simplewebauthn/browser's `startAuthentication()` */
+    response: {
+        /** Credential ID */
+        id: string;
+        response: {
+            /** User handle */
+            userHandle?: string;
+            [key: string]: any;
+        };
+        [key: string]: any;
+    };
+};
+export type PasskeyAuthenticationOptionsDto = {
+    [key: string]: any;
+};
+export type PasskeyRegistrationFinishDto = {
+    /** Passkey name */
+    name?: string;
+    /** Response returned by @simplewebauthn/browser's `startAuthentication()` */
+    response: any;
+};
+export type PasskeyRegistrationOptionsDto = {
+    [key: string]: any;
+};
+export type PasskeyUpdateDto = {
+    /** Passkey name */
+    name: string | null;
+};
 export type PeopleDeleteDto = {
     /** IDs to process */
     ids: string[];
@@ -2193,11 +2261,30 @@ export type PluginTemplateResponseDto = {
     /** Ui hints, for example "smart-album" */
     uiHints: string[];
 };
+export type PublicConfigFFmpegRealtimeDto = {
+    /** Enable real-time HLS transcoding (alpha) */
+    enabled: boolean;
+};
+export type PublicConfigFFmpegDto = {
+    realtime: PublicConfigFFmpegRealtimeDto;
+};
+export type PublicConfigMapDto = {
+    /** Dark map style URL */
+    darkStyle: string;
+    /** Enabled */
+    enabled: boolean;
+    /** Light map style URL */
+    lightStyle: string;
+};
 export type PublicConfigOAuthDto = {
     /** Auto launch */
     autoLaunch: boolean;
     /** Button text */
     buttonText: string;
+    /** Enabled */
+    enabled: boolean;
+};
+export type PublicConfigPasskeyDto = {
     /** Enabled */
     enabled: boolean;
 };
@@ -2209,15 +2296,13 @@ export type PublicConfigServerDto = {
     /** Login page message */
     loginPageMessage: string;
 };
-export type PublicConfigThemeDto = {
-    /** Custom CSS for theming */
-    customCss: string;
-};
 export type PublicConfigDto = {
+    ffmpeg: PublicConfigFFmpegDto;
+    map: PublicConfigMapDto;
     oauth: PublicConfigOAuthDto;
+    passkey: PublicConfigPasskeyDto;
     passwordLogin: PublicConfigPasswordLoginDto;
     server: PublicConfigServerDto;
-    theme: PublicConfigThemeDto;
 };
 export type QueueResponseDto = {
     /** Whether the queue is paused */
@@ -2829,6 +2914,8 @@ export type ServerConfigDto = {
     userDeleteDelay: number;
 };
 export type ServerFeaturesDto = {
+    /** Whether the backups feature is enabled */
+    backups: boolean;
     /** Whether config file is available */
     configFile: boolean;
     /** Whether duplicate detection is enabled */
@@ -2928,6 +3015,8 @@ export type ServerStorageResponseDto = {
     diskUseRaw: number;
 };
 export type ServerVersionResponseDto = {
+    /** Highest feature level supported by the server, which increments independently of the release version */
+    featureLevel: number;
     /** Major version number */
     major: number;
     /** Minor version number */
@@ -3747,6 +3836,33 @@ export type SyncMemoryDeleteV1 = {
     memoryId: string;
 };
 export type SyncMemoryV1 = {
+    /** Created at */
+    createdAt: string;
+    /** Data */
+    data: {
+        [key: string]: any;
+    };
+    /** Deleted at */
+    deletedAt: string | null;
+    /** Hide at */
+    hideAt: string | null;
+    /** Memory ID */
+    id: string;
+    /** Is saved */
+    isSaved: boolean;
+    /** Memory at */
+    memoryAt: string;
+    /** Owner ID */
+    ownerId: string;
+    /** Seen at */
+    seenAt: string | null;
+    /** Show at */
+    showAt: string | null;
+    "type": MemoryTypeV1;
+    /** Updated at */
+    updatedAt: string;
+};
+export type SyncMemoryV2 = {
     /** Created at */
     createdAt: string;
     /** Data */
@@ -6116,6 +6232,115 @@ export function updatePartner({ id, partnerUpdateDto }: {
     })));
 }
 /**
+ * Search passkeys
+ */
+export function searchPasskeys({ id }: {
+    id?: string;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: PasskeyResponseDto[];
+    }>(`/passkeys${QS.query(QS.explode({
+        id
+    }))}`, {
+        ...opts
+    }));
+}
+/**
+ * Finish passkey authentication
+ */
+export function finishAuthentication({ passkeyAuthenticationFinishDto }: {
+    passkeyAuthenticationFinishDto: PasskeyAuthenticationFinishDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 201;
+        data: LoginResponseDto;
+    }>("/passkeys/authentication/finish", oazapfts.json({
+        ...opts,
+        method: "POST",
+        body: passkeyAuthenticationFinishDto
+    })));
+}
+/**
+ * Start passkey authentication
+ */
+export function startAuthentication(opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: PasskeyAuthenticationOptionsDto;
+    }>("/passkeys/authentication/start", {
+        ...opts,
+        method: "POST"
+    }));
+}
+/**
+ * Finish passkey registration
+ */
+export function finishRegistration({ passkeyRegistrationFinishDto }: {
+    passkeyRegistrationFinishDto: PasskeyRegistrationFinishDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 201;
+        data: PasskeyResponseDto;
+    }>("/passkeys/registration/finish", oazapfts.json({
+        ...opts,
+        method: "POST",
+        body: passkeyRegistrationFinishDto
+    })));
+}
+/**
+ * Start passkey registration
+ */
+export function startRegistration(opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: PasskeyRegistrationOptionsDto;
+    }>("/passkeys/registration/start", {
+        ...opts,
+        method: "POST"
+    }));
+}
+/**
+ * Delete a passkey
+ */
+export function deletePasskey({ id }: {
+    id: string;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchText(`/passkeys/${encodeURIComponent(id)}`, {
+        ...opts,
+        method: "DELETE"
+    }));
+}
+/**
+ * Retrieve a passkey
+ */
+export function getPasskey({ id }: {
+    id: string;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: PasskeyResponseDto;
+    }>(`/passkeys/${encodeURIComponent(id)}`, {
+        ...opts
+    }));
+}
+/**
+ * Update a passkey
+ */
+export function updatePasskey({ id, passkeyUpdateDto }: {
+    id: string;
+    passkeyUpdateDto: PasskeyUpdateDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: PasskeyResponseDto;
+    }>(`/passkeys/${encodeURIComponent(id)}`, oazapfts.json({
+        ...opts,
+        method: "PATCH",
+        body: passkeyUpdateDto
+    })));
+}
+/**
  * Delete people
  */
 export function deletePeople({ peopleDeleteDto }: {
@@ -8034,6 +8259,7 @@ export enum Colorspace {
 }
 export enum ImageFormat {
     Jpeg = "jpeg",
+    Jxl = "jxl",
     Webp = "webp"
 }
 export enum LogLevel {
@@ -8061,7 +8287,8 @@ export enum MaintenanceAction {
     Start = "start",
     End = "end",
     SelectDatabaseRestore = "select_database_restore",
-    RestoreDatabase = "restore_database"
+    RestoreDatabase = "restore_database",
+    Rollback = "rollback"
 }
 export enum StorageFolder {
     EncodedVideo = "encoded-video",
@@ -8170,6 +8397,7 @@ export enum Permission {
     BackupDelete = "backup.delete",
     ClusterGroupRead = "clusterGroup.read",
     ClusterGroupLeave = "clusterGroup.leave",
+    ClusterGroupAdmin = "clusterGroup.admin",
     ClusterGroupRequestCreate = "clusterGroupRequest.create",
     ClusterGroupRequestRead = "clusterGroupRequest.read",
     ClusterGroupRequestDelete = "clusterGroupRequest.delete",
@@ -8210,6 +8438,9 @@ export enum Permission {
     PartnerRead = "partner.read",
     PartnerUpdate = "partner.update",
     PartnerDelete = "partner.delete",
+    PasskeyRead = "passkey.read",
+    PasskeyUpdate = "passkey.update",
+    PasskeyDelete = "passkey.delete",
     PersonCreate = "person.create",
     PersonRead = "person.read",
     PersonUpdate = "person.update",
@@ -8418,6 +8649,7 @@ export enum WorkflowType {
 export enum WorkflowTrigger {
     AssetCreate = "AssetCreate",
     AssetMetadataExtraction = "AssetMetadataExtraction",
+    AssetOcrExtraction = "AssetOcrExtraction",
     AssetTagged = "AssetTagged"
 }
 export enum QueueJobStatus {
@@ -8445,6 +8677,7 @@ export enum JobName {
     AssetGenerateThumbnailsQueueAll = "AssetGenerateThumbnailsQueueAll",
     AssetGenerateThumbnails = "AssetGenerateThumbnails",
     AuditTableCleanup = "AuditTableCleanup",
+    AuthChallengeCleanup = "AuthChallengeCleanup",
     DatabaseBackup = "DatabaseBackup",
     FacialRecognitionQueueAll = "FacialRecognitionQueueAll",
     FacialRecognition = "FacialRecognition",
@@ -8565,8 +8798,10 @@ export enum SyncEntityType {
     AlbumToAssetDeleteV1 = "AlbumToAssetDeleteV1",
     AlbumToAssetBackfillV1 = "AlbumToAssetBackfillV1",
     MemoryV1 = "MemoryV1",
+    MemoryV2 = "MemoryV2",
     MemoryDeleteV1 = "MemoryDeleteV1",
     MemoryToAssetV1 = "MemoryToAssetV1",
+    MemoryToAssetV2 = "MemoryToAssetV2",
     MemoryToAssetDeleteV1 = "MemoryToAssetDeleteV1",
     StackV1 = "StackV1",
     StackDeleteV1 = "StackDeleteV1",
@@ -8599,7 +8834,9 @@ export enum SyncRequestType {
     AuthUsersV1 = "AuthUsersV1",
     AuthUsersV2 = "AuthUsersV2",
     MemoriesV1 = "MemoriesV1",
+    MemoriesV2 = "MemoriesV2",
     MemoryToAssetsV1 = "MemoryToAssetsV1",
+    MemoryToAssetsV2 = "MemoryToAssetsV2",
     PartnersV1 = "PartnersV1",
     PartnerAssetsV1 = "PartnerAssetsV1",
     PartnerAssetsV2 = "PartnerAssetsV2",
@@ -8622,6 +8859,9 @@ export enum WorkflowResult {
     Halted = "halted",
     Error = "error"
 }
+export enum MemoryTypeV1 {
+    OnThisDay = "on_this_day"
+}
 export enum ReleaseType {
     Major = "major",
     Premajor = "premajor",
@@ -8630,6 +8870,10 @@ export enum ReleaseType {
     Patch = "patch",
     Prepatch = "prepatch",
     Prerelease = "prerelease"
+}
+export enum ServerFeatureLevel {
+    FeatureLevel = 1,
+    Passkeys = 2
 }
 export enum UserMetadataKey {
     Preferences = "preferences",

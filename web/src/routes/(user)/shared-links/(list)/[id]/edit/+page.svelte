@@ -1,21 +1,19 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import SharedLinkFormFields from '$lib/components/SharedLinkFormFields.svelte';
-  import { Route } from '$lib/route';
-  import { handleUpdateSharedLink } from '$lib/services/shared-link.service';
+  import SharedLinkFormFields from '#lib/components/SharedLinkFormFields.svelte';
+  import { createPreloadedQuery, executeMutation } from '#lib/queries/client.ts';
+  import { getSharedLinkQuery, updateSharedLinkMutation } from '#lib/queries/shared-link.query.ts';
+  import { Route } from '#lib/route.ts';
   import { SharedLinkType } from '@immich/sdk';
   import { FormModal } from '@immich/ui';
   import { mdiLink } from '@mdi/js';
   import { t } from 'svelte-i18n';
-  import type { PageData } from './$types';
+  import { goto } from '$app/navigation';
+  import type { PageProps } from './$types';
 
-  type Props = {
-    data: PageData;
-  };
+  const { params }: PageProps = $props();
 
-  let { data }: Props = $props();
-
-  const sharedLink = $state(data.sharedLink);
+  const query = createPreloadedQuery(() => getSharedLinkQuery(params.id));
+  const sharedLink = $derived(query.data);
 
   let description = $state(sharedLink.description ?? '');
   let allowDownload = $state(sharedLink.allowDownload);
@@ -27,12 +25,9 @@
   let expiresAt = $state(sharedLink.expiresAt);
   let includeSubAlbums = $state(sharedLink.includeSubAlbums);
 
-  const onClose = async () => {
-    await goto(Route.sharedLinks());
-  };
-
+  const onClose = () => void goto(Route.sharedLinks());
   const onSubmit = async () => {
-    const success = await handleUpdateSharedLink(sharedLink, {
+    const sharedLinkEditDto = {
       description,
       password: password ?? null,
       expiresAt,
@@ -40,11 +35,16 @@
       allowDownload,
       showMetadata,
       slug: slug.trim() ?? null,
+<<<<<<< HEAD
       includeSubAlbums,
     });
     if (success) {
       await onClose();
     }
+=======
+    };
+    await executeMutation(updateSharedLinkMutation, [{ id: sharedLink.id, sharedLinkEditDto }], { onSuccess: onClose });
+>>>>>>> v3.4.1
   };
 </script>
 

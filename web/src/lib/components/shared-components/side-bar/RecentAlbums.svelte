@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Route } from '$lib/route';
-  import { userInteraction } from '$lib/stores/user.svelte';
-  import { getAssetMediaUrl } from '$lib/utils';
-  import { handleError } from '$lib/utils/handle-error';
-  import { getAllAlbums } from '@immich/sdk';
-  import { t } from 'svelte-i18n';
+  import { getRecentAlbumsQuery } from '#lib/queries/album.query.ts';
+  import { queryClient } from '#lib/queries/client.ts';
+  import { Route } from '#lib/route.ts';
+  import { getAssetMediaUrl } from '#lib/utils.ts';
+  import { createQuery } from '@tanstack/svelte-query';
 
+<<<<<<< HEAD
   let albums = $state(userInteraction.recentAlbums);
 
   const refreshAlbums = async () => {
@@ -24,6 +24,10 @@
       void refreshAlbums();
     }
   });
+=======
+  const query = createQuery(getRecentAlbumsQuery, () => queryClient);
+  const albums = $derived(query.data ?? []);
+>>>>>>> v3.4.1
 </script>
 
 {#each albums as album (album.id)}

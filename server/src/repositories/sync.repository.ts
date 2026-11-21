@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { type Kysely, sql } from 'kysely';
+import { sql, type Kysely } from 'kysely';
 import { InjectKysely } from 'nestjs-kysely';
-import type { SyncAck } from 'src/types.js';
 import { columns } from 'src/database.js';
 import { DummyValue, GenerateSql } from 'src/decorators.js';
+import { MemoryType } from 'src/enum.js';
 import { DB } from 'src/schema/index.js';
+import type { SyncAck } from 'src/types.js';
 
 export type SyncBackfillOptions = {
   nowId: string;
@@ -595,6 +596,21 @@ class MemoryToAssetSync extends BaseSync {
 
   cleanupAuditTable(daysAgo: number) {
     return this.auditCleanup('memory_asset_audit', daysAgo);
+  }
+
+  @GenerateSql({ params: [dummyQueryOptions], stream: true })
+  getUpsertsV1(options: SyncQueryOptions) {
+    return this.upsertQuery('memory_asset', options)
+      .select(['memoriesId as memoryId', 'assetId as assetId'])
+      .select('updateId')
+      .where('memoriesId', 'in', (eb) =>
+        eb
+          .selectFrom('memory')
+          .select('id')
+          .where('ownerId', '=', options.userId)
+          .where('type', '=', sql.lit(MemoryType.OnThisDay)),
+      )
+      .stream();
   }
 
   @GenerateSql({ params: [dummyQueryOptions], stream: true })

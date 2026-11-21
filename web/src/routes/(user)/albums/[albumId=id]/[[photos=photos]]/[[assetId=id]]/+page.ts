@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { getAllAlbums, getAlbumInfo, type AlbumResponseDto } from '@immich/sdk';
 import { authenticate } from '$lib/utils/auth';
 import type { PageLoad } from './$types';
@@ -35,6 +36,19 @@ export const load = (async ({ params, url, depends }) => {
     album,
     childAlbums,
     ancestors,
+=======
+import { getAlbumInfoQuery } from '#lib/queries/album.query.ts';
+import { queryClient } from '#lib/queries/client.ts';
+import { authenticate } from '#lib/utils/auth.ts';
+import type { PageLoad } from './$types';
+
+export const load = (async ({ params, url }) => {
+  await authenticate(url);
+
+  const album = await queryClient.query({ ...getAlbumInfoQuery(params.albumId), staleTime: 0 });
+
+  return {
+>>>>>>> v3.4.1
     meta: {
       title: album.albumName,
     },

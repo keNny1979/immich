@@ -31,3 +31,4 @@ vite.config.js.timestamp-*
 
 # local dev only: npm registry mirror used inside the dev containers
 /.npmrc
+misc/release/notes.md

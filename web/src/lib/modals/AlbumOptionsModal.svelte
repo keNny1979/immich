@@ -1,13 +1,15 @@
 <script lang="ts">
-  import AlbumSharedLink from '$lib/components/album-page/AlbumSharedLink.svelte';
-  import HeaderActionButton from '$lib/components/HeaderActionButton.svelte';
-  import OnEvents from '$lib/components/OnEvents.svelte';
-  import UserAvatar from '$lib/components/shared-components/UserAvatar.svelte';
+  import HeaderActionButton from '#lib/components/HeaderActionButton.svelte';
+  import AlbumSharedLink from '#lib/components/album-page/AlbumSharedLink.svelte';
+  import UserAvatar from '#lib/components/shared-components/UserAvatar.svelte';
+  import { getAlbumQuery, updateAlbumInfoMutation } from '#lib/queries/album.query.ts';
+  import { executeMutation, queryClient } from '#lib/queries/client.ts';
+  import { getAllSharedLinksQuery } from '#lib/queries/shared-link.query.ts';
   import {
     getAlbumActions,
     handleRemoveUserFromAlbum,
-    handleUpdateAlbum,
     handleUpdateUserAlbumRole,
+<<<<<<< HEAD
     isAlbumOwner,
   } from '$lib/services/album.service';
   import {
@@ -16,13 +18,19 @@
     getAllAlbums,
     getAlbumInfo,
     getAllSharedLinks,
+=======
+  } from '#lib/services/album.service.ts';
+  import {
+    AlbumUserRole,
+    AssetOrder,
+>>>>>>> v3.4.1
     type AlbumResponseDto,
-    type SharedLinkResponseDto,
+    type UpdateAlbumDto,
     type UserResponseDto,
   } from '@immich/sdk';
   import { getSubtreeIds } from '$lib/utils/album-utils';
   import { Field, HStack, Modal, ModalBody, Select, Stack, Switch, Text, type SelectOption } from '@immich/ui';
-  import { onMount } from 'svelte';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from 'svelte-i18n';
 
   type Props = {
@@ -31,7 +39,13 @@
     onClose: () => void;
   };
 
-  let { album, readOnly = false, onClose }: Props = $props();
+  let { album: initialAlbum, readOnly = false, onClose }: Props = $props();
+
+  const query = createQuery(
+    () => getAlbumQuery(initialAlbum.id),
+    () => queryClient,
+  );
+  const album = $derived(query.data ?? initialAlbum);
 
   const handleRoleSelect = async (user: UserResponseDto, role: AlbumUserRole | 'none') => {
     if (role === 'none') {
@@ -48,25 +62,9 @@
     });
   };
 
-  const refreshAlbum = async () => {
-    album = await getAlbumInfo({ id: album.id });
-  };
-
-  const onAlbumUserDelete = async ({ userId }: { userId: string }) => {
-    album.albumUsers = album.albumUsers.filter(({ user: { id } }) => id !== userId);
-    await refreshAlbum();
-  };
-
-  const onSharedLinkCreate = (sharedLink: SharedLinkResponseDto) => {
-    sharedLinks.push(sharedLink);
-  };
-
-  const onSharedLinkDelete = (sharedLink: SharedLinkResponseDto) => {
-    sharedLinks = sharedLinks.filter(({ id }) => sharedLink.id !== id);
-  };
-
   const { AddUsers, CreateSharedLink } = $derived(getAlbumActions($t, album));
 
+<<<<<<< HEAD
   let sharedLinks: SharedLinkResponseDto[] = $state([]);
   let albums: AlbumResponseDto[] = $state([]);
 
@@ -106,6 +104,18 @@
   onAlbumUpdate={(newAlbum) => (album = newAlbum)}
 />
 
+=======
+  const updateAlbum = (updateAlbumDto: UpdateAlbumDto) =>
+    executeMutation(updateAlbumInfoMutation, [{ id: album.id, updateAlbumDto }]);
+
+  const sharedLinksQuery = createQuery(
+    () => getAllSharedLinksQuery({ albumId: album.id }),
+    () => queryClient,
+  );
+  const sharedLinks = $derived(sharedLinksQuery.data ?? []);
+</script>
+
+>>>>>>> v3.4.1
 <Modal title={readOnly ? $t('album') : $t('options')} {onClose} size="small">
   <ModalBody>
     <Stack gap={6}>
@@ -120,7 +130,7 @@
                   { label: $t('newest_first'), value: AssetOrder.Desc },
                   { label: $t('oldest_first'), value: AssetOrder.Asc },
                 ]}
-                onChange={(value) => handleUpdateAlbum(album, { order: value })}
+                onChange={(value) => updateAlbum({ order: value })}
               />
             </Field>
           {/if}
@@ -137,7 +147,7 @@
           <Field label={$t('comments_and_likes')} description={$t('let_others_respond')} disabled={readOnly}>
             <Switch
               checked={album.isActivityEnabled}
-              onCheckedChange={(checked) => handleUpdateAlbum(album, { isActivityEnabled: checked })}
+              onCheckedChange={(checked) => updateAlbum({ isActivityEnabled: checked })}
             />
           </Field>
         </div>

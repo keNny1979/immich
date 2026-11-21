@@ -1,13 +1,13 @@
+import { defaultLang } from '#lib/constants.ts';
+import { convertBCP47, getPreferredLocale } from '#lib/utils/i18n.ts';
 import { persisted } from 'svelte-persisted-store';
-import { browser } from '$app/environment';
-import { defaultLang } from '$lib/constants';
-import { convertBCP47, getPreferredLocale } from '$lib/utils/i18n';
+import { browser } from '$app/env';
 
 // Locale to use for formatting dates, numbers, etc.
 export const locale = persisted('locale', 'default', {
   serializer: {
     parse: (text) => convertBCP47(text) || 'default',
-    stringify: (object) => object ?? '',
+    stringify: (object = '') => object,
   },
 });
 
@@ -15,7 +15,7 @@ const preferredLocale = browser ? getPreferredLocale() : undefined;
 export const lang = persisted<string>('lang', preferredLocale || defaultLang.code, {
   serializer: {
     parse: (text) => convertBCP47(text),
-    stringify: (object) => object ?? '',
+    stringify: (object = '') => object,
   },
 });
 
@@ -137,5 +137,9 @@ export const alwaysLoadOriginalVideo = persisted<boolean>('always-load-original-
 
 export const recentAlbumsDropdown = persisted<boolean>('recent-albums-open', true, {});
 
+<<<<<<< HEAD
 /** Album ids that are unfolded in the sidebar album tree. */
 export const sidebarAlbumTreeExpanded = persisted<string[]>('sidebar-album-tree-expanded', [], {});
+=======
+export const hideBackupsReminder = persisted<boolean>('hide-backups-reminder', false, {});
+>>>>>>> v3.4.1
