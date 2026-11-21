@@ -324,6 +324,7 @@ export const handleLeaveAlbum = async (album: AlbumResponseDto) => {
   try {
     await removeUserFromAlbum({ id: album.id, userId: 'me' });
     userInteraction.recentAlbums = undefined;
+    userInteraction.sidebarAlbums = undefined;
     eventManager.emit('AlbumDelete', album);
     return true;
   } catch (error) {

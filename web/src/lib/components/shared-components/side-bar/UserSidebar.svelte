@@ -1,6 +1,6 @@
 <script lang="ts">
   import BottomInfo from '$lib/components/shared-components/side-bar/BottomInfo.svelte';
-  import RecentAlbums from '$lib/components/shared-components/side-bar/RecentAlbums.svelte';
+  import AlbumTree from '$lib/components/shared-components/side-bar/AlbumTree.svelte';
   import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
   import { authManager } from '$lib/managers/auth-manager.svelte';
   import { featureFlagsManager } from '$lib/managers/feature-flags-manager.svelte';
@@ -81,7 +81,7 @@
   >
     {#snippet items()}
       <span in:fly={{ y: -20 }} class="hidden md:block">
-        <RecentAlbums />
+        <AlbumTree />
       </span>
     {/snippet}
   </NavbarItem>

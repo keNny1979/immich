@@ -8,6 +8,7 @@ import { eventManager } from '$lib/managers/event-manager.svelte';
 
 interface UserInteractions {
   recentAlbums?: AlbumResponseDto[];
+  sidebarAlbums?: AlbumResponseDto[];
   versions?: ServerVersionHistoryResponseDto[];
   aboutInfo?: ServerAboutResponseDto;
   serverInfo?: ServerStorageResponseDto;
@@ -15,6 +16,7 @@ interface UserInteractions {
 
 const defaultUserInteraction: UserInteractions = {
   recentAlbums: undefined,
+  sidebarAlbums: undefined,
   versions: undefined,
   aboutInfo: undefined,
   serverInfo: undefined,
@@ -24,6 +26,7 @@ export const userInteraction = $state<UserInteractions>(defaultUserInteraction);
 
 const resetRecentAlbums = () => {
   userInteraction.recentAlbums = undefined;
+  userInteraction.sidebarAlbums = undefined;
 };
 
 const reset = () => {

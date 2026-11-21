@@ -136,3 +136,6 @@ export const autoPlayVideo = persisted<boolean>('auto-play-video', true, {});
 export const alwaysLoadOriginalVideo = persisted<boolean>('always-load-original-video', false, {});
 
 export const recentAlbumsDropdown = persisted<boolean>('recent-albums-open', true, {});
+
+/** Album ids that are unfolded in the sidebar album tree. */
+export const sidebarAlbumTreeExpanded = persisted<string[]>('sidebar-album-tree-expanded', [], {});
