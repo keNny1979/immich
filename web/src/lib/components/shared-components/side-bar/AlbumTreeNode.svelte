@@ -40,7 +40,11 @@
         title={expanded ? $t('collapse') : $t('expand')}
         onclick={() => onToggle(album.id)}
       >
-        <Icon icon={mdiChevronRight} size="18" class="transition-transform duration-150 {expanded ? 'rotate-90' : ''}" />
+        <Icon
+          icon={mdiChevronRight}
+          size="18"
+          class="transition-transform duration-150 {expanded ? 'rotate-90' : ''}"
+        />
       </button>
     {:else}
       <span class="size-6 shrink-0"></span>

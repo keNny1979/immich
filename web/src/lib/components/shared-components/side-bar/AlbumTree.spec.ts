@@ -1,10 +1,10 @@
+import { fireEvent, render, screen } from '@testing-library/svelte';
+import { tick } from 'svelte';
 import { sdkMock } from '$lib/__mocks__/sdk.mock';
 import AlbumTree from '$lib/components/shared-components/side-bar/AlbumTree.svelte';
 import { sidebarAlbumTreeExpanded } from '$lib/stores/preferences.store';
 import { userInteraction } from '$lib/stores/user.svelte';
 import { albumFactory } from '@test-data/factories/album-factory';
-import { fireEvent, render, screen } from '@testing-library/svelte';
-import { tick } from 'svelte';
 
 const pageState = vi.hoisted(() => ({ url: new URL('http://localhost/photos') }));
 vi.mock('$app/state', () => ({ page: pageState }));

@@ -170,7 +170,12 @@
                     checked={includeSubAlbums}
                     disabled={readOnly}
                     onCheckedChange={(checked) =>
-                      handleUpdateUserAlbumRole({ albumId: album.id, userId: user.id, role, includeSubAlbums: checked })}
+                      handleUpdateUserAlbumRole({
+                        albumId: album.id,
+                        userId: user.id,
+                        role,
+                        includeSubAlbums: checked,
+                      })}
                   />
                 {/if}
                 <Field class="w-32" disabled={readOnly || role === AlbumUserRole.Owner}>
