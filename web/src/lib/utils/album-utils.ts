@@ -92,10 +92,11 @@ export const getSubtreeIds = (albums: AlbumResponseDto[], albumId: string): Set<
   while (stack.length > 0) {
     const current = stack.pop()!;
     for (const child of childrenByParent.get(current) ?? []) {
-      if (!result.has(child.id)) {
-        result.add(child.id);
-        stack.push(child.id);
+      if (result.has(child.id)) {
+        continue;
       }
+      result.add(child.id);
+      stack.push(child.id);
     }
   }
   return result;

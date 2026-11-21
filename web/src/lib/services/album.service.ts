@@ -260,7 +260,7 @@ export const handleUpdateUserAlbumRole = async ({
     await updateAlbumUser({
       id: albumId,
       userId,
-      updateAlbumUserDto: { role, ...(includeSubAlbums === undefined ? {} : { includeSubAlbums }) },
+      updateAlbumUserDto: { role, ...(includeSubAlbums !== undefined && { includeSubAlbums }) },
     });
     eventManager.emit('AlbumUserUpdate', { albumId, userId, role });
   } catch (error) {
